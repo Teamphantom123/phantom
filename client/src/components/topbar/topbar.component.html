@@ -1,0 +1,43 @@
+<nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
+  <a href="#home" class="navbar-brand p-0">
+    <h1 class="m-0">
+      <img src="assets/img/logo.png" style="height: 10%; width: 10%" />
+    </h1>
+  </a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#navbarCollapse"
+  >
+    <span class="fa fa-bars"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    <div class="navbar-nav ms-auto py-0">
+      <a
+        href="#home"
+        class="nav-item nav-link"
+        [class.active]="id == 'home'"
+        (click)="setId('home')"
+        >Home</a
+      >
+      <a
+        href="#about"
+        class="nav-item nav-link"
+        (click)="setId('about')"
+        [class.active]="id == 'about'"
+        >About</a
+      >
+      <a
+        href="#services"
+        class="nav-item nav-link"
+        (click)="setId('services')"
+        [class.active]="id == 'services'"
+        >Services</a
+      >
+      <a *ngIf="isLoggedIn" class="nav-item nav-link" (click)="logout()"
+        ><i class="bi-power"></i
+      > Logout</a>
+    </div>
+  </div>
+</nav>

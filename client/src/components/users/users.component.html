@@ -1,0 +1,64 @@
+<div class="container-fluid">
+  <div class="row">
+    <app-sidebar></app-sidebar>
+    <!-- overlay to close sidebar on small screens -->
+    <div
+      class="w-100 vh-100 position-fixed overlay d-none"
+      id="sidebar-overlay"
+    ></div>
+    <!-- note: in the layout margin auto is the key as sidebar is fixed -->
+    <div class="col-md-9 col-lg-10 ml-md-auto px-0">
+      <!-- main content -->
+      <main class="container-fluid dashboard">
+        <div
+          class="jumbotron jumbotron-fluid rounded bg-white border-0 shadow-sm border-left px-4"
+        >
+          <div class="container">
+            <div class="container rounded bg-white mt-5 mb-5">
+              <div class="row">
+                <div
+                  class="d-flex justify-content-between align-items-center mb-3"
+                >
+                  <div class="container table-responsive py-5">
+                    <h4 class="text-right">User Details</h4>
+                    <table class="table table-bordered table-hover">
+                      <thead class="thead-dark">
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">First Name</th>
+                          <th scope="col">Last Name</th>
+                          <th scope="col">Email ID</th>
+                          <th scope="col">Mobile</th>
+                          <th scope="col">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <span *ngIf="userList.length == 0"
+                            >No data found</span
+                          >
+                        </tr>
+                        <tr *ngFor="let user of userList; let i = index">
+                          <th scope="row">{{ i + 1 }}</th>
+                          <td>{{ user.firstName }}</td>
+                          <td>{{ user.lastName }}</td>
+                          <td>{{ user.emailId }}</td>
+                          <td>{{ user.mobile }}</td>
+                          <td>
+                            <i class="bi-person-check-fill"></i>
+                            <i class="bi-x-square-fill"></i>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+<ngx-loader-spinner></ngx-loader-spinner>

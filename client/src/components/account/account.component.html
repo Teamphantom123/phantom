@@ -1,0 +1,163 @@
+<div class="container-fluid">
+  <div class="row">
+    <app-sidebar></app-sidebar>
+    <div class="col-md-9 col-lg-10 ml-md-auto px-0">
+      <!-- main content -->
+      <main class="container-fluid dashboard">
+        <div
+          class="jumbotron jumbotron-fluid rounded bg-white border-0 shadow-sm border-left px-4"
+        >
+          <div class="container">
+            <div class="container rounded bg-white mt-5 mb-5">
+              <div class="row">
+                <div class="col-md-3 border-right">
+                  <div
+                    class="d-flex flex-column align-items-center text-center p-3 py-5"
+                  >
+                    <img
+                      class="rounded-circle mt-5"
+                      width="150px"
+                      src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
+                    /><span class="font-weight-bold">{{ fullName }}</span
+                    ><span class="text-black-50">{{ emailId }}</span
+                    ><span> </span>
+                  </div>
+                </div>
+                <div class="col-md-8 border-right">
+                  <div
+                    class="d-flex justify-content-between align-items-center mb-3"
+                  >
+                    <h4 class="text-right">Profile Settings</h4>
+                  </div>
+                  <form [formGroup]="accountForm">
+                    <div class="row g-3">
+                      <div class="col-xl-12">
+                        <input
+                          type="text"
+                          class="form-control bg-light border-0"
+                          placeholder="First Name"
+                          formControlName="firstName"
+                          style="height: 55px"
+                          [ngClass]="{
+                            'input-error':
+                              (accountForm.get('firstName')?.dirty ||
+                                accountForm.get('firstName')?.touched) &&
+                              accountForm.get('firstName')?.invalid
+                          }"
+                        />
+                        <span
+                          class="text-danger"
+                          *ngIf="
+                            (accountForm.get('firstName')?.dirty ||
+                              accountForm.get('firstName')?.touched) &&
+                            accountForm.get('firstName')!.invalid
+                          "
+                          >Firstname must meet validation criteria.
+                        </span>
+                      </div>
+                      <div class="col-12">
+                        <input
+                          type="email"
+                          class="form-control bg-light border-0"
+                          placeholder="Last Name"
+                          style="height: 55px"
+                          formControlName="lastName"
+                          [ngClass]="{
+                            'input-error':
+                              (accountForm.get('lastName')?.dirty ||
+                                accountForm.get('lastName')?.touched) &&
+                              accountForm.get('lastName')?.invalid
+                          }"
+                        />
+                        <span
+                          class="text-danger"
+                          *ngIf="
+                            (accountForm.get('lastName')?.dirty ||
+                              accountForm.get('lastName')?.touched) &&
+                            accountForm.get('lastName')!.invalid
+                          "
+                          >LastName must meet validation criteria.
+                        </span>
+                      </div>
+                      <div class="col-12">
+                        <input
+                          type="email"
+                          class="form-control bg-light border-0"
+                          placeholder="Email ID"
+                          style="height: 55px"
+                          formControlName="emailId"
+                          [ngClass]="{
+                            'input-error':
+                              (accountForm.get('emailId')?.dirty ||
+                                accountForm.get('emailId')?.touched) &&
+                              accountForm.get('emailId')?.invalid
+                          }"
+                        />
+                        <span
+                          class="text-danger"
+                          *ngIf="
+                            (accountForm.get('emailId')?.dirty ||
+                              accountForm.get('emailId')?.touched) &&
+                            accountForm.get('emailId')!.invalid
+                          "
+                          >EmailId must meet validation criteria.
+                        </span>
+                      </div>
+                      <div class="col-xl-12">
+                        <input
+                          type="text"
+                          class="form-control bg-light border-0"
+                          placeholder="Mobile"
+                          style="height: 55px"
+                          formControlName="mobile"
+                          [ngClass]="{
+                            'input-error':
+                              (accountForm.get('mobile')?.dirty ||
+                                accountForm.get('mobile')?.touched) &&
+                              accountForm.get('mobile')?.invalid
+                          }"
+                        />
+                        <span
+                          class="text-danger"
+                          *ngIf="
+                            (accountForm.get('mobile')?.dirty ||
+                              accountForm.get('mobile')?.touched) &&
+                            accountForm.get('mobile')!.invalid
+                          "
+                          >Mobile must meet validation criteria.
+                        </span>
+                      </div>
+                      <div
+                        class="alert alert-success"
+                        *ngIf="!onLoadOnUpdateUser && successOnUpdateUser"
+                      >
+                        <span>{{ alertHeadingOnUpdateUser }}! {{ successMessageOnUpdateUser }}</span>
+                      </div>
+                      <div
+                        class="alert alert-danger"
+                        *ngIf="!onLoadOnUpdateUser && !successOnUpdateUser"
+                      >
+                        <span>{{ alertHeadingOnUpdateUser }}! {{ errorMessageOnUpdateUser }}</span>
+                      </div>
+                      <div class="col-12">
+                        <button
+                          class="btn btn-dark w-100 py-3"
+                          type="submit"
+                          [disabled]="accountForm.invalid"
+                          (click)="updateUser()"
+                        >
+                          Update
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+<ngx-loader-spinner></ngx-loader-spinner>
