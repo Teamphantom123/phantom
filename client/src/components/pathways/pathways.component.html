@@ -1,0 +1,481 @@
+<ngx-loader-spinner></ngx-loader-spinner>
+<div class="container-fluid">
+  <div class="row">
+    <app-sidebar></app-sidebar>
+    <div class="col-md-9 col-lg-10 ml-md-auto px-0">
+      <!-- main content -->
+
+      <main class="container-fluid dashboard">
+        <button
+          class="btn btn-sm btn-back btn-dark"
+          type="submit"
+          *ngIf="currentView && switchDataView && isAdmin == 'true'"
+          (click)="getPathwaysAuditByQuery(); currentView = false"
+        >
+          <span class="fa fa-backward"></span> Switch to Previous DataView
+        </button>
+
+        <div
+          class="jumbotron jumbotron-fluid rounded bg-white border-0 shadow-sm border-left px-4"
+        >
+          <div class="container">
+            <button
+              class="btn btn-sm btn-back btn-dark pull-right"
+              type="submit"
+              *ngIf="!currentView && isAdmin == 'true'"
+              (click)="getPathwaysByQuery(); currentView = true"
+            >
+              Switch to Current DataView <span class="fa fa-refresh"></span>
+            </button>
+
+            <button
+              class="btn btn-dark w-5 pull-right"
+              type="submit"
+              data-bs-toggle="modal"
+              data-bs-target="#pathwayModal"
+              (click)="resetModal()"
+              *ngIf="currentView && isAdmin == 'true'"
+            >
+              Add Pathway
+            </button>
+
+            <div [ngClass]="className" *ngIf="!onComponentLoad">
+              <span
+                >{{ header ? header : "Error" }}!
+                {{ message ? message : "Internal Server Error." }}.</span
+              >
+            </div>
+            <div
+              class="nav nav-tabs d-flex"
+              id="nav-tab"
+              role="tablist"
+              style="margin-bottom: 3%"
+            >
+              <a
+                *ngFor="let pathway of pathwaysList; let _p = index"
+                (click)="
+                  selectTab = pathway.pathway;
+                  currentView ? getPathwaysByQuery() : getPathwaysAuditByQuery
+                "
+                [ngClass]="
+                  selectTab == pathway.pathway
+                    ? 'active-tab'
+                    : 'w-100 nav-item _nav-link'
+                "
+              >
+                <span
+                  *ngIf="currentView && isAdmin == 'true'"
+                  class="fa fa-edit"
+                  title="edit"
+                  (click)="setPathwayDataToModal(_p, pathway.pathway)"
+                ></span>
+                <span (click)="onTabSelect(pathway.pathway)">{{
+                  pathway.pathway
+                }}</span>
+
+                <span
+                  *ngIf="
+                    pathwaysList.length > 1 && currentView && isAdmin == 'true'
+                  "
+                  class="fa fa-trash"
+                  title="delete"
+                  (click)="deletePathway(pathway.pathway)"
+                ></span>
+              </a>
+            </div>
+            <div *ngFor="let pathway of pathwaysList">
+              <div
+                class="container"
+                *ngIf="selectTab == pathway.pathway && !isEditMode"
+              >
+                <button
+                  style="margin-left: 10px"
+                  class="btn btn-sm btn-back btn-dark pull-right"
+                  type="submit"
+                  (click)="_collapseClass()"
+                  *ngIf="
+                    pathway.accordians.length > 0 &&
+                    currentView &&
+                    isAdmin == 'true'
+                  "
+                >
+                  Collapse/Expand Accordian <span class="fa fa-expand"></span>
+                </button>
+                <button
+                  class="btn btn-sm btn-add btn-dark pull-right"
+                  type="submit"
+                  (click)="isEditMode = true"
+                  *ngIf="
+                    pathway.accordians.length > 0 &&
+                    currentView &&
+                    isAdmin == 'true'
+                  "
+                >
+                  Edit Accordian
+                </button>
+
+                <button
+                  class="btn btn-sm btn-add btn-dark pull-right"
+                  type="submit"
+                  (click)="addAccordian(); isEditMode = true"
+                  *ngIf="
+                    pathway.accordians.length == 0 &&
+                    currentView &&
+                    isAdmin == 'true'
+                  "
+                >
+                  + Add Accordian
+                </button>
+
+                <h1
+                  class="display-4 mb-2 text-primary"
+                  style="font-size: 1.5rem"
+                >
+                  {{ pathway.heading }}
+                </h1>
+
+                <div class="text-muted">
+                  <div class="accordion" id="parentAcc">
+                    <div
+                      class="accordion-item"
+                      *ngFor="let acc of pathway.accordians; let ia = index"
+                    >
+                      <h2 class="accordion-header" [id]="'child' + ia + 'Hea'">
+                        <button
+                          class="accordion-button"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          [attr.data-bs-target]="'#child' + ia + 'Coll'"
+                          aria-expanded="true"
+                          [attr.aria-controls]="'child' + ia + 'Coll'"
+                        >
+                          {{ acc.accordianName }}
+                        </button>
+                      </h2>
+                      <div
+                        [id]="'child' + ia + 'Coll'"
+                        [ngClass]="collapseClass"
+                        [attr.aria-labelledby]="'child' + ia + 'Hea'"
+                        data-bs-parent="#parentAcc"
+                      >
+                        <div class="accordion-body">
+                          <div class="accordion">
+                            {{ acc.accordianContent }}
+
+                            <div class="accordion" id="parentSubAcc">
+                              <div
+                                class="accordion-item"
+                                *ngFor="
+                                  let subAcc of acc.subAccordians;
+                                  let isa = index
+                                "
+                              >
+                                <h2
+                                  class="accordion-header"
+                                  [id]="'child' + ia + isa + 'Hea'"
+                                >
+                                  <button
+                                    class="accordion-button"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    [attr.data-bs-target]="
+                                      '#child' + ia + isa + 'Coll'
+                                    "
+                                    aria-expanded="true"
+                                    [attr.aria-controls]="
+                                      'child' + ia + isa + 'Coll'
+                                    "
+                                  >
+                                    {{ subAcc.accordianName }}
+                                  </button>
+                                </h2>
+                                <div
+                                  [id]="'child' + ia + isa + 'Coll'"
+                                  [ngClass]="collapseClass"
+                                  [attr.aria-labelledby]="
+                                    'child' + ia + isa + 'Hea'
+                                  "
+                                  data-bs-parent="#parentSubAcc"
+                                >
+                                  <div class="accordion-body">
+                                    <div class="accordion">
+                                      {{ subAcc.accordianContent }}
+
+                                      <div
+                                        class="accordion"
+                                        id="parentSubSubAcc"
+                                      >
+                                        <div
+                                          class="accordion-item"
+                                          *ngFor="
+                                            let subsubAcc of subAcc.subAccordians;
+                                            let issa = index
+                                          "
+                                        >
+                                          <h2
+                                            class="accordion-header"
+                                            [id]="
+                                              'child' + ia + isa + issa + 'Hea'
+                                            "
+                                          >
+                                            <button
+                                              class="accordion-button"
+                                              type="button"
+                                              data-bs-toggle="collapse"
+                                              [attr.data-bs-target]="
+                                                '#child' +
+                                                ia +
+                                                isa +
+                                                issa +
+                                                'Coll'
+                                              "
+                                              aria-expanded="true"
+                                              [attr.aria-controls]="
+                                                'child' +
+                                                ia +
+                                                isa +
+                                                issa +
+                                                'Coll'
+                                              "
+                                            >
+                                              {{ subsubAcc.accordianName }}
+                                            </button>
+                                          </h2>
+                                          <div
+                                            [id]="
+                                              'child' + ia + isa + issa + 'Coll'
+                                            "
+                                            [ngClass]="collapseClass"
+                                            [attr.aria-labelledby]="
+                                              'child' + ia + isa + issa + 'Hea'
+                                            "
+                                            data-bs-parent="#parentSubSubAcc"
+                                          >
+                                            <div class="accordion-body">
+                                              <div class="accordion">
+                                                {{ subsubAcc.accordianContent }}
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="container"
+                *ngIf="selectTab == pathway.pathway && isEditMode"
+              >
+                <button
+                  class="btn btn-sm btn-add btn-dark pull-right"
+                  type="submit"
+                  (click)="addAccordian()"
+                >
+                  + Add Accordian
+                </button>
+                <h1
+                  class="display-4 mb-2 text-primary"
+                  style="font-size: 1.5rem"
+                >
+                  {{ pathway.heading }}
+                </h1>
+                <div [formGroup]="pathwayForm">
+                  <div
+                    formArrayName="accordians"
+                    *ngFor="
+                      let acc of pathwayForm.controls.accordians.controls;
+                      let i = index
+                    "
+                  >
+                    <div [formGroupName]="i" class="accGroup">
+                      <br />
+                      <button
+                        class="btn btn-add btn-sm btn-dark"
+                        type="submit"
+                        (click)="addSubAccordian(i)"
+                      >
+                        + Add Sub Accordian
+                      </button>
+                      <br />
+                      <br />
+                      <input
+                        class="form-control bg-light border-0"
+                        formControlName="accordianName"
+                        placeholder="Accordian name"
+                      />
+                      <br />
+                      <textarea
+                        rows="5"
+                        class="form-control bg-light border-0"
+                        formControlName="accordianContent"
+                        placeholder="AccordianContent"
+                      ></textarea>
+                      <div
+                        formArrayName="subAccordians"
+                        *ngFor="
+                          let subAcc of this.pathwayForm.controls.accordians
+                            .controls[i]['controls']['subAccordians'][
+                            'controls'
+                          ];
+                          let j = index
+                        "
+                      >
+                        <div [formGroupName]="j" class="subAccGroup">
+                          <br />
+                          <button
+                            class="btn btn-add btn-sm btn-dark"
+                            type="submit"
+                            (click)="addSubSubAccordian(i, j)"
+                          >
+                            + Add
+                          </button>
+                          <br />
+                          <br />
+                          <input
+                            class="form-control bg-light border-0"
+                            formControlName="accordianName"
+                            placeholder="Accordian name"
+                          />
+                          <br />
+                          <textarea
+                            rows="5"
+                            class="form-control bg-light border-0"
+                            formControlName="accordianContent"
+                            placeholder="AccordianContent"
+                          ></textarea>
+
+                          <div
+                            formArrayName="subAccordians"
+                            *ngFor="
+                              let subSubAcc of this.pathwayForm.controls
+                                .accordians.controls[i]['controls'][
+                                'subAccordians'
+                              ]['controls'][j]['controls']['subAccordians'][
+                                'controls'
+                              ];
+                              let k = index
+                            "
+                          >
+                            <div [formGroupName]="k" class="subSubAccGroup">
+                              <br />
+                              <br />
+                              <input
+                                class="form-control bg-light border-0"
+                                formControlName="accordianName"
+                                placeholder="Accordian name"
+                              />
+                              <br />
+                              <textarea
+                                rows="5"
+                                class="form-control bg-light border-0"
+                                formControlName="accordianContent"
+                                placeholder="AccordianContent"
+                              ></textarea>
+
+                              <button
+                                class="btn btn-delete btn-sm btn-dark pull-right"
+                                type="submit"
+                                (click)="deleteSubSubAccordian(i, j, k)"
+                              >
+                                - Delete
+                              </button>
+                            </div>
+                          </div>
+
+                          <button
+                            class="btn btn-delete btn-sm btn-dark"
+                            type="submit"
+                            (click)="deleteSubAccordian(i, j)"
+                          >
+                            - Delete
+                          </button>
+                        </div>
+                      </div>
+
+                      <button
+                        class="btn btn-delete btn-sm btn-dark"
+                        type="submit"
+                        (click)="deleteAccordian(i)"
+                        *ngIf="
+                          pathwayForm.controls.accordians.controls.length > 1
+                        "
+                      >
+                        - Delete Accordian
+                      </button>
+                    </div>
+                  </div>
+                  <button
+                    class="btn btn-save btn-dark w-5"
+                    type="submit"
+                    (click)="updatePathway()"
+                    *ngIf="pathwayForm.controls.accordians.controls.length > 0"
+                  >
+                    Update Accordians
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="pathwayModal" role="dialog">
+  <div class="modal-dialog modal-lg" data-wow-delay="0.1s">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="d-flex align-items-center justify-content-center">
+          <img src="assets/img/logo.png" style="height: 15%; width: 15%" />
+        </h1>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="pathwayForm">
+          <div class="row g-3">
+            <input
+              class="form-control bg-light border-0"
+              placeholder="Enter Pathway Name"
+              type="text"
+              name="pathway"
+              formControlName="pathway"
+            />
+            <input
+              class="form-control bg-light border-0"
+              placeholder="Enter Pathway Heading"
+              type="text"
+              name="heading"
+              formControlName="heading"
+            />
+            <div [ngClass]="className" *ngIf="!onComponentLoad">
+              <span
+                >{{ header ? header : "Error" }}!
+                {{ message ? message : "Internal Server Error." }}.</span
+              >
+            </div>
+            <button
+              class="btn btn-dark w-5 pull-right"
+              type="submit"
+              [disabled]="pathwayForm.invalid"
+              (click)="AddUpdateValue == 'Add' ? addPathway() : editPathway()"
+            >
+              {{ AddUpdateValue }} Pathway
+            </button>
+          </div>
+        </form>
+        <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+  <ngx-loader-spinner></ngx-loader-spinner>
+</div>

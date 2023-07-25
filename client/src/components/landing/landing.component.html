@@ -1,0 +1,119 @@
+<div class="container-fluid position-relative p-0">
+  <app-topbar></app-topbar>
+  <app-dashboard></app-dashboard>
+  <app-about></app-about>
+  <app-services></app-services>
+  <app-footer></app-footer>
+  <div id="mybutton">
+    <button
+      class="feedback"
+      data-bs-toggle="modal"
+      data-bs-target="#feedbackModal"
+      (click)="resetModal()"
+    >
+      Feedback form!
+    </button>
+  </div>
+</div>
+
+<div class="modal" id="feedbackModal" role="dialog">
+  <div class="modal-dialog modal-lg" data-wow-delay="0.1s">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="d-flex align-items-center justify-content-center">
+          <img src="assets/img/logo.png" style="height: 15%; width: 15%" />
+        </h1>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="feedbackForm">
+          <div class="row g-3">
+            <div
+              class="col-xl-12"
+              *ngFor="let questionObj of questionsList; let i = index"
+            >
+              <label>{{ i + 1 }}. {{ questionObj.question }}</label
+              ><br /><br />
+              <input
+                type="radio"
+                name="haveComments{{ i }}"
+                value="true"
+                formControlName="haveComments{{ i }}"
+                (click)="onClickComments(questionObj.generalFeedback, i, true)"
+              />
+              Yes
+              <input
+                type="radio"
+                name="haveComments{{ i }}"
+                value="false"
+                formControlName="haveComments{{ i }}"
+                (click)="onClickComments(questionObj.generalFeedback, i, false)"
+              />
+              No
+              <div
+                *ngIf="
+                  !questionObj.generalFeedback && haveComments(i) == 'true'
+                "
+              >
+                <br /><br />
+                <label>Please select pathway:</label>
+                <select class="form-control" formControlName="pathway{{ i }}">
+                  <option class="form-control" value="null" selected disabled>
+                    --Select--
+                  </option>
+                  <option
+                    class="form-control"
+                    value="{{ pathway.pathway }}"
+                    *ngFor="let pathway of pathways"
+                  >
+                    {{ pathway.pathway }}
+                  </option>
+                </select>
+              </div>
+              <div *ngIf="haveComments(i) == 'true'">
+                <br /><br />
+                <label>Please share your comments:</label>
+                <textarea
+                  class="form-control"
+                  formControlName="feedback{{ i }}"
+                  [ngClass]="{
+                    'input-error':
+                      (feedbackForm.get('feedback' + i)?.dirty ||
+                        feedbackForm.get('feedback' + i)?.touched) &&
+                      feedbackForm.get('feedback' + i)?.invalid
+                  }"
+                ></textarea>
+                <span
+                  class="text-danger"
+                  *ngIf="
+                    (feedbackForm.get('feedback' + i)?.dirty ||
+                      feedbackForm.get('feedback' + i)?.touched) &&
+                    feedbackForm.get('feedback' + i)!.invalid
+                  "
+                  >Feedback must meet validation criteria.
+                </span>
+              </div>
+            </div>
+            <div [ngClass]="className" *ngIf="!onComponentLoad">
+              <span
+                >{{ header ? header : "Error" }}!
+                {{ message ? message : "Internal Server Error." }}.</span
+              >
+            </div>
+            <div class="col-12">
+              <button
+                class="btn btn-dark w-100 py-3"
+                type="submit"
+                [disabled]="feedbackForm.invalid"
+                (click)="postComments()"
+              >
+                Send Feedback
+              </button>
+            </div>
+          </div>
+        </form>
+        <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+  <ngx-loader-spinner></ngx-loader-spinner>
+</div>

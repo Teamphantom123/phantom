@@ -1,0 +1,517 @@
+<div id="home" class="carousel slide carousel-fade" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img class="w-100" src="assets/img/carousel-1.jpg" alt="Image" />
+      <div
+        class="carousel-caption d-flex flex-column align-items-center justify-content-center"
+      >
+        <div class="p-3" style="max-width: 900px" *ngIf="!isLoggedIn">
+          <h5 class="text-white text-uppercase mb-3 animated slideInDown">
+            Clinical pathways
+          </h5>
+          <h1 class="display-1 text-white mb-md-4 animated zoomIn">
+            Coming Soon!
+          </h1>
+          <a
+            class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft"
+            data-bs-toggle="modal"
+            data-bs-target="#loginModal"
+            (click)="resetModal()"
+            ><i class="fa fa-user"></i> Login</a
+          >
+          <a
+            class="btn btn-outline-light py-md-3 px-md-5 animated slideInRight"
+            data-bs-toggle="modal"
+            data-bs-target="#signUpModal"
+            (click)="resetModal()"
+          >
+            Sign up</a
+          >
+        </div>
+
+        <div class="p-3" style="max-width: 900px" *ngIf="isLoggedIn">
+          <h5 class="text-white text-uppercase mb-3 animated slideInDown">
+            Clinical pathways
+          </h5>
+          <h1 class="display-1 text-white mb-md-4 animated zoomIn">
+            Coming Soon!
+          </h1>
+          <a
+            class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft"
+            (click)="goToDashboard()"
+            ><i class="fa fa-user"></i> Go to Dashboard</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Full Screen Search Start -->
+<div class="modal" id="signUpModal" role="dialog">
+  <div class="modal-dialog modal-lg" data-wow-delay="0.1s">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="d-flex align-items-center justify-content-center">
+          <img src="assets/img/logo.png" style="height: 15%; width: 15%" />
+        </h1>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="signUpForm">
+          <div class="row g-3">
+            <div class="col-xl-12">
+              <input
+                type="text"
+                class="form-control bg-light border-0"
+                placeholder="First Name *"
+                style="height: 55px"
+                formControlName="firstName"
+                [ngClass]="{
+                  'input-error':
+                    (signUpForm.get('firstName')?.dirty ||
+                      signUpForm.get('firstName')?.touched) &&
+                    signUpForm.get('firstName')?.invalid
+                }"
+              />
+              <span
+                class="text-danger"
+                *ngIf="
+                  (signUpForm.get('firstName')?.dirty ||
+                    signUpForm.get('firstName')?.touched) &&
+                  signUpForm.get('firstName')!.invalid
+                "
+                >Firstname must meet validation criteria.
+              </span>
+            </div>
+            <div class="col-12">
+              <input
+                type="email"
+                class="form-control bg-light border-0"
+                placeholder="Last Name *"
+                style="height: 55px"
+                formControlName="lastName"
+                [ngClass]="{
+                  'input-error':
+                    (signUpForm.get('lastName')?.dirty ||
+                      signUpForm.get('lastName')?.touched) &&
+                    signUpForm.get('lastName')?.invalid
+                }"
+              />
+              <span
+                class="text-danger"
+                *ngIf="
+                  (signUpForm.get('lastName')?.dirty ||
+                    signUpForm.get('lastName')?.touched) &&
+                  signUpForm.get('lastName')!.invalid
+                "
+                >Lastname must meet validation criteria.
+              </span>
+            </div>
+            <div class="col-12">
+              <input
+                type="email"
+                class="form-control bg-light border-0"
+                placeholder="Email ID *"
+                style="height: 55px"
+                formControlName="emailId"
+                [ngClass]="{
+                  'input-error':
+                    (signUpForm.get('emailId')?.dirty ||
+                      signUpForm.get('emailId')?.touched) &&
+                    signUpForm.get('emailId')?.invalid
+                }"
+              />
+              <span
+                class="text-danger"
+                *ngIf="
+                  (signUpForm.get('emailId')?.dirty ||
+                    signUpForm.get('emailId')?.touched) &&
+                  signUpForm.get('emailId')!.invalid
+                "
+                >Email ID must meet validation criteria.
+              </span>
+            </div>
+            <div class="col-xl-12">
+              <input
+                type="text"
+                class="form-control bg-light border-0"
+                placeholder="Mobile *"
+                style="height: 55px"
+                formControlName="mobile"
+                [ngClass]="{
+                  'input-error':
+                    (signUpForm.get('mobile')?.dirty ||
+                      signUpForm.get('mobile')?.touched) &&
+                    signUpForm.get('mobile')?.invalid
+                }"
+              />
+              <span
+                class="text-danger"
+                *ngIf="
+                  (signUpForm.get('mobile')?.dirty ||
+                    signUpForm.get('mobile')?.touched) &&
+                  signUpForm.get('mobile')!.invalid
+                "
+                >Mobile must meet validation criteria.
+              </span>
+            </div>
+            <div class="col-12">
+              <select
+                class="form-control bg-light border-0"
+                formControlName="designation"
+                style="height: 55px"
+                [ngClass]="{
+                  'input-error':
+                    (signUpForm.get('designation')?.dirty ||
+                      signUpForm.get('designation')?.touched) &&
+                    signUpForm.get('designation')?.invalid
+                }"
+              >
+                <option value="null" selected hidden>
+                  Select Designation *
+                </option>
+                <option value="Doctor">Doctor</option>
+                <option value="Nurse Practioner">Nurse Practioner</option>
+              </select>
+              <span
+                class="text-danger"
+                *ngIf="
+                  (signUpForm.get('designation')?.dirty ||
+                    signUpForm.get('designation')?.touched) &&
+                  signUpForm.get('designation')!.invalid
+                "
+                >Designation must meet validation criteria.
+              </span>
+            </div>
+            <div class="col-12">
+              <input
+                type="text"
+                class="form-control bg-light border-0"
+                placeholder="Government Identification Number *"
+                formControlName="govtIDNumber"
+                style="height: 55px"
+                [ngClass]="{
+                  'input-error':
+                    (signUpForm.get('govtIDNumber')?.dirty ||
+                      signUpForm.get('govtIDNumber')?.touched) &&
+                    signUpForm.get('govtIDNumber')?.invalid
+                }"
+              />
+              <span
+                class="text-danger"
+                *ngIf="
+                  (signUpForm.get('govtIDNumber')?.dirty ||
+                    signUpForm.get('govtIDNumber')?.touched) &&
+                  signUpForm.get('govtIDNumber')!.invalid
+                "
+                >Government Identification Number must meet validation criteria.
+              </span>
+            </div>
+            <div class="col-12">
+              <input
+                type="text"
+                class="form-control bg-light border-0"
+                placeholder="Username *"
+                formControlName="userName"
+                style="height: 55px"
+                [ngClass]="{
+                  'input-error':
+                    (signUpForm.get('userName')?.dirty ||
+                      signUpForm.get('userName')?.touched) &&
+                    signUpForm.get('userName')?.invalid
+                }"
+              />
+              <span
+                class="text-danger"
+                *ngIf="
+                  (signUpForm.get('userName')?.dirty ||
+                    signUpForm.get('userName')?.touched) &&
+                  signUpForm.get('userName')!.invalid
+                "
+                >Username must meet validation criteria.
+              </span>
+            </div>
+            <div class="col-12">
+              <input
+                type="password"
+                class="form-control bg-light border-0"
+                placeholder="Password *"
+                style="height: 55px"
+                formControlName="password"
+                [ngClass]="{
+                  'input-error':
+                    (signUpForm.get('password')?.dirty ||
+                      signUpForm.get('password')?.touched) &&
+                    signUpForm.get('password')?.invalid
+                }"
+                (keyup)="onLoad ? null : comparePassword()"
+              />
+              <span
+                class="text-danger"
+                *ngIf="
+                  (signUpForm.get('password')?.dirty ||
+                    signUpForm.get('password')?.touched) &&
+                  signUpForm.get('password')!.invalid
+                "
+                >Password must meet validation criteria.
+              </span>
+            </div>
+            <div class="col-xl-12">
+              <input
+                type="password"
+                class="form-control bg-light border-0"
+                placeholder="Confirm Password *"
+                style="height: 55px"
+                formControlName="confirmPassword"
+                [ngClass]="{
+                  'input-error':
+                    (signUpForm.get('confirmPassword')?.dirty ||
+                      signUpForm.get('confirmPassword')?.touched) &&
+                    signUpForm.get('confirmPassword')?.invalid
+                }"
+                (keyup)="comparePassword()"
+              />
+              <span
+                class="text-danger"
+                *ngIf="
+                  (signUpForm.get('confirmPassword')?.dirty ||
+                    signUpForm.get('confirmPassword')?.touched) &&
+                  signUpForm.get('confirmPassword')!.invalid
+                "
+                >Confirm Password must meet validation criteria.
+              </span>
+              <br />
+              <span class="text-danger" *ngIf="!samePassword"
+                >Your password and confirm password do not match.</span
+              >
+            </div>
+            <div [ngClass]="className" *ngIf="!onComponentLoad">
+              <span
+                >{{ header ? header : "Error" }}!
+                {{ message ? message : "Internal Server Error." }}.</span
+              >
+            </div>
+            <div class="col-12">
+              <button
+                class="btn btn-dark w-100 py-3"
+                type="submit"
+                [disabled]="signUpForm.invalid"
+                (click)="saveUser()"
+              >
+                Sign Up
+              </button>
+            </div>
+          </div>
+        </form>
+        <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+  <ngx-loader-spinner></ngx-loader-spinner>
+</div>
+<!-- Full Screen Search End -->
+<!-- Full Screen Search Start -->
+
+<div class="modal" id="loginModal" role="dialog">
+  <div class="modal-dialog modal-lg" data-wow-delay="0.1s">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="d-flex align-items-center justify-content-center">
+          <img src="assets/img/logo.png" style="height: 15%; width: 15%" />
+        </h1>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="loginForm" *ngIf="!isForgotPassword">
+          <div class="row g-3">
+            <div class="col-xl-12">
+              <input
+                type="text"
+                class="form-control bg-light border-0"
+                placeholder="Username / Email Id *"
+                style="height: 55px"
+                formControlName="_user"
+                [ngClass]="{
+                  'input-error':
+                    (loginForm.get('_user')?.dirty ||
+                      loginForm.get('_user')?.touched) &&
+                    loginForm.get('_user')?.invalid
+                }"
+              />
+              <span
+                class="text-danger"
+                *ngIf="
+                  (loginForm.get('_user')?.dirty ||
+                    loginForm.get('_user')?.touched) &&
+                  loginForm.get('_user')!.invalid
+                "
+                >Username / Email Id must meet validation criteria.
+              </span>
+            </div>
+            <div class="col-12" *ngIf="!showDummyPassword">
+              <input
+                type="password"
+                placeholder="Password *"
+                class="form-control bg-light border-0"
+                style="height: 55px"
+                formControlName="password"
+                [ngClass]="{
+                  'input-error':
+                    (loginForm.get('password')?.dirty ||
+                      loginForm.get('password')?.touched) &&
+                    loginForm.get('password')?.invalid
+                }"
+              />
+              <span
+                class="text-danger"
+                *ngIf="
+                  (loginForm.get('password')?.dirty ||
+                    loginForm.get('password')?.touched) &&
+                  loginForm.get('password')!.invalid
+                "
+                >Password must meet validation criteria.
+              </span>
+            </div>
+
+            <div class="col-12" *ngIf="showDummyPassword">
+              <input
+                type="password"
+                placeholder="***********************************************************************************************************************"
+                class="form-control bg-light border-0"
+                style="height: 55px"
+              />
+            </div>
+
+            <div [ngClass]="className" *ngIf="!onComponentLoad">
+              <span
+                >{{ header ? header : "Error" }}!
+                {{ message ? message : "Internal Server Error." }}.</span
+              >
+            </div>
+            <div class="col-12">
+              <button
+                (click)="login(); showDummyPassword = true"
+                class="btn btn-dark w-100 py-3"
+                [disabled]="loginForm.invalid"
+              >
+                <span> Login</span>
+              </button>
+            </div>
+            <a
+              class="btn btn-link btn-floating mx-1"
+              (click)="onForgotPasswordSelection()"
+              >Forgot Password <i class="fa fa-question-circle"></i
+            ></a>
+          </div>
+        </form>
+
+        <form [formGroup]="forgotPasswordForm" *ngIf="isForgotPassword">
+          <div class="row g-3">
+            <div class="col-xl-12">
+              <input
+                type="text"
+                class="form-control bg-light border-0"
+                placeholder="Username / Email Id *"
+                style="height: 55px"
+                formControlName="_user"
+                [ngClass]="{
+                  'input-error':
+                    (forgotPasswordForm.get('_user')?.dirty ||
+                      forgotPasswordForm.get('_user')?.touched) &&
+                    forgotPasswordForm.get('_user')?.invalid
+                }"
+              />
+              <span
+                class="text-danger"
+                *ngIf="
+                  (forgotPasswordForm.get('_user')?.dirty ||
+                    forgotPasswordForm.get('_user')?.touched) &&
+                  forgotPasswordForm.get('_user')!.invalid
+                "
+                >Username / Email Id must meet validation criteria.
+              </span>
+            </div>
+            <div class="col-12">
+              <input
+                type="password"
+                class="form-control bg-light border-0"
+                placeholder="Password *"
+                style="height: 55px"
+                formControlName="password"
+                [ngClass]="{
+                  'input-error':
+                    (forgotPasswordForm.get('password')?.dirty ||
+                      forgotPasswordForm.get('password')?.touched) &&
+                    forgotPasswordForm.get('password')?.invalid
+                }"
+                (keyup)="onLoad ? null : comparePassword()"
+              />
+              <span
+                class="text-danger"
+                *ngIf="
+                  (forgotPasswordForm.get('password')?.dirty ||
+                    forgotPasswordForm.get('password')?.touched) &&
+                  forgotPasswordForm.get('password')!.invalid
+                "
+                >Password must meet validation criteria.
+              </span>
+            </div>
+            <div class="col-xl-12">
+              <input
+                type="password"
+                class="form-control bg-light border-0"
+                placeholder="Confirm Password *"
+                style="height: 55px"
+                formControlName="confirmPassword"
+                [ngClass]="{
+                  'input-error':
+                    (forgotPasswordForm.get('confirmPassword')?.dirty ||
+                      forgotPasswordForm.get('confirmPassword')?.touched) &&
+                    forgotPasswordForm.get('confirmPassword')?.invalid
+                }"
+                (keyup)="_comparePassword()"
+              />
+              <span
+                class="text-danger"
+                *ngIf="
+                  (forgotPasswordForm.get('confirmPassword')?.dirty ||
+                    forgotPasswordForm.get('confirmPassword')?.touched) &&
+                  forgotPasswordForm.get('confirmPassword')!.invalid
+                "
+                >Confirm Password must meet validation criteria.
+              </span>
+              <br />
+              <span class="text-danger" *ngIf="!_samePassword"
+                >Your password and confirm password do not match.</span
+              >
+            </div>
+
+            <div [ngClass]="className" *ngIf="!onComponentLoad">
+              <span
+                >{{ header ? header : "Error" }}!
+                {{ message ? message : "Internal Server Error." }}.</span
+              >
+            </div>
+            <div class="col-12">
+              <button
+                (click)="forgotPassword()"
+                class="btn btn-dark w-100 py-3"
+                [disabled]="forgotPasswordForm.invalid"
+              >
+                <span> Forgot Password</span>
+              </button>
+            </div>
+            <a
+              class="btn btn-link btn-floating mx-1"
+              (click)="onBackToLoginSelection()"
+              >Back to login <i class="fa fa-arrow-left"></i
+            ></a>
+          </div>
+        </form>
+
+        <!-- <div class="modal-footer"></div> -->
+      </div>
+    </div>
+  </div>
+  <ngx-loader-spinner></ngx-loader-spinner>
+</div>
+
+<!-- Full Screen Search End -->
